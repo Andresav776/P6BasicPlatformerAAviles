@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -13,6 +15,7 @@ public class PlayerController : MonoBehaviour
     public float horizontalInput;
     public float verticalInput;
     public float speed = 7;
+    public TextMeshProUGUI youWonText;
 
     // Start is called before the first frame update
     void Start()
@@ -31,7 +34,12 @@ public class PlayerController : MonoBehaviour
         {
             playerRb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             isOnGround = false;
-        }     
+        }
+
+        if (transform.position.y < -5.5f)
+        {
+            transform.position = new Vector3(-4.5f, -3.5f, 0);
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -39,6 +47,13 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             isOnGround = true;
+        }
+
+        if (collision.gameObject.CompareTag("Goal"))
+        {
+            gameOver = true;
+            youWonText.gameObject.SetActive(true);
+            Time.timeScale = 0;
         }
     }
 }
